@@ -1,54 +1,12 @@
 const express = require('express');
 const app = express();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const helmet = require("helmet");
 
 module.exports = app;
 const api = require('./server.js');
+
+app.use(helmet());
+
 app.use(express.static('public'));
 app.disable('strict-transport-security');
 app.use('/_api', api);
