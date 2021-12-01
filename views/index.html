@@ -21,10 +21,13 @@
     </main>
 
     <footer>
-      <a href="https://repl.it/github/freeCodeCamp/boilerplate-infosec">
-        Fork on Repl.it
-      </a>
+      <span id="display"></span>>
     </footer>
 
   </body>
+
+  <script>
+  var span = document.getElementById("display");
+  span.innerText = new Date().toLocaleTimeString();
+  </script>
 </html>
