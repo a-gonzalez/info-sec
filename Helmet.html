@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- saved from url=(0027)https://helmetjs.github.io/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Helmet</title>
+  <meta name="description" content="Helmet helps you secure your Express.js apps by setting various HTTP headers. It&#39;s not a silver bullet, but it can help!">
+
+  <link href="./Helmet_files/main.css" rel="stylesheet">
+  <link href="https://helmetjs.github.io/" rel="canonical">
+</head>
+
+<body>
+  <header class="site-header">
+  <div class="wrapper">
+    <h1><a class="site-title" href="https://helmetjs.github.io/"><img class="site-logo" src="./Helmet_files/logo.svg" alt=""> Helmet</a></h1>
+    <p class="site-description">Express.js security with HTTP headers. Latest version: <strong>4.6.0</strong></p>
+  </div>
+
+  <nav class="site-nav">
+    <div class="wrapper">
+      <a class="page-link" href="https://github.com/helmetjs/helmet/blob/master/CHANGELOG.md" target="_blank" rel="noreferrer noopener">Changelog</a>
+      <a class="page-link" href="https://helmetjs.github.io/contributors">Contributors</a>
+      <a class="page-link" href="https://helmetjs.github.io/see-also">See also</a>
+      <a class="page-link" href="https://www.npmjs.com/package/helmet" target="_blank" rel="noreferrer noopener">npm</a>
+      <a class="page-link" href="https://github.com/helmetjs/helmet" target="_blank" rel="noreferrer noopener">Source</a>
+    </div>
+  </nav>
+</header>
+
+
+  <div class="page-content">
+    <div class="wrapper">
+      <article class="post">
+
+  
+
+  <div class="post-content">
+    <p>Helmet helps you secure your Express apps by setting various HTTP headers. <em>It's not a silver bullet</em>, but it can help!</p>
+<h2 id="quick-start">Quick start</h2>
+<p>First, run <code>npm install helmet --save</code> for your app. Then, in an Express app:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">express</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">helmet</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">helmet</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">());</span>
+
+<span class="c1">// ...</span>
+</code></pre></div></div>
+<h2 id="how-it-works">How it works</h2>
+<p>Helmet is <a href="https://github.com/senchalabs/connect">Connect</a>-style middleware, which is compatible with frameworks like <a href="https://expressjs.com/">Express</a>. (If you need support for Koa, see <a href="https://github.com/venables/koa-helmet"><code>koa-helmet</code></a>.)</p>
+<p>The top-level <code>helmet</code> function is a wrapper around 15 smaller middlewares, 11 of which are enabled by default.</p>
+<p>In other words, these two things are equivalent:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This...</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">());</span>
+
+<span class="c1">// ...is equivalent to this:</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">dnsPrefetchControl</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">expectCt</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">frameguard</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">hidePoweredBy</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">hsts</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">ieNoOpen</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">noSniff</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">permittedCrossDomainPolicies</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">referrerPolicy</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">xssFilter</span><span class="p">());</span>
+</code></pre></div></div>
+<p>To set custom options for one of the middleware, add options like this:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This sets custom options for the `referrerPolicy` middleware.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">({</span>
+    <span class="na">referrerPolicy</span><span class="p">:</span> <span class="p">{</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-referrer</span><span class="dl">"</span> <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can also disable a middleware:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This disables the `contentSecurityPolicy` middleware but keeps the rest.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">({</span>
+    <span class="na">contentSecurityPolicy</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<h2 id="reference">Reference</h2>
+<details>
+<summary><code>helmet(options)</code></summary>
+<p>Helmet is the top-level middleware for this module, including all 15 others.</p>
+<p>11 of 15 middlewares are included by default. <code>crossOriginEmbedderPolicy</code>, <code>crossOriginOpenerPolicy</code>, <code>crossOriginResourcePolicy</code>, and <code>originAgentCluster</code> are not included by default. They must be explicitly enabled. They will be turned on by default in the next major version of Helmet.</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Includes all 11 middlewares</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">());</span>
+</code></pre></div></div>
+<p>If you want to disable one, pass options to <code>helmet</code>. For example, to disable <code>frameguard</code>:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Includes 10 middlewares, skipping `helmet.frameguard`</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">({</span>
+    <span class="na">frameguard</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>Most of the middlewares have options, which are documented in more detail below. For example, to pass <code>{ action: "deny" }</code> to <code>frameguard</code>:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Includes all 11 middlewares, setting an option for `helmet.frameguard`</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">({</span>
+    <span class="na">frameguard</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">deny</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>Each middleware's name is listed below.</p>
+</details>
+<details>
+<summary><code>helmet.contentSecurityPolicy(options)</code></summary>
+<p><code>helmet.contentSecurityPolicy</code> sets the <code>Content-Security-Policy</code> header which helps mitigate cross-site scripting attacks, among other things. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">MDN's introductory article on Content Security Policy</a>.</p>
+<p>This middleware performs very little validation. You should rely on CSP checkers like <a href="https://csp-evaluator.withgoogle.com/">CSP Evaluator</a> instead.</p>
+<p><code>options.directives</code> is an object. Each key is a directive name in camel case (such as <code>defaultSrc</code>) or kebab case (such as <code>default-src</code>). Each value is an iterable (usually an array) of strings or functions for that directive. If a function appears in the iterable, it will be called with the request and response. The <code>default-src</code> can be explicitly disabled by setting its value to <code>helmet.contentSecurityPolicy.dangerouslyDisableDefaultSrc</code>.</p>
+<p><code>options.reportOnly</code> is a boolean, defaulting to <code>false</code>. If <code>true</code>, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only">the <code>Content-Security-Policy-Report-Only</code> header</a> will be set instead.</p>
+<p>If no directives are supplied, the following policy is set (whitespace added for readability):</p>
+<pre><code>default-src 'self';
+base-uri 'self';
+block-all-mixed-content;
+font-src 'self' https: data:;
+frame-ancestors 'self';
+img-src 'self' data:;
+object-src 'none';
+script-src 'self';
+script-src-attr 'none';
+style-src 'self' https: 'unsafe-inline';
+upgrade-insecure-requests
+</code></pre>
+<p>You can use this default with the <code>options.useDefaults</code> option. <code>options.useDefaults</code> is <code>false</code> by default, but will be <code>true</code> in the next major version of Helmet.</p>
+<p>You can also get the default directives object with <code>helmet.contentSecurityPolicy.getDefaultDirectives()</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets all of the defaults, but overrides `script-src` and disables the default `style-src`</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">({</span>
+    <span class="na">useDefaults</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">directives</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">script-src</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'self'</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">example.com</span><span class="dl">"</span><span class="p">],</span>
+      <span class="dl">"</span><span class="s2">style-src</span><span class="dl">"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Content-Security-Policy: default-src 'self';script-src 'self' example.com;object-src 'none';upgrade-insecure-requests"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">({</span>
+    <span class="na">useDefaults</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">directives</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">defaultSrc</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'self'</span><span class="dl">"</span><span class="p">],</span>
+      <span class="na">scriptSrc</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'self'</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">example.com</span><span class="dl">"</span><span class="p">],</span>
+      <span class="na">objectSrc</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'none'</span><span class="dl">"</span><span class="p">],</span>
+      <span class="na">upgradeInsecureRequests</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets the "Content-Security-Policy-Report-Only" header instead</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">({</span>
+    <span class="na">useDefaults</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">directives</span><span class="p">:</span> <span class="p">{</span>
+      <span class="cm">/* ... */</span>
+    <span class="p">},</span>
+    <span class="na">reportOnly</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets the `script-src` directive to "'self' 'nonce-e33ccde670f149c1789b1e1e113b0916'" (or similar)</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">((</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">locals</span><span class="p">.</span><span class="nx">cspNonce</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+  <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">({</span>
+    <span class="na">useDefaults</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">directives</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">scriptSrc</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'self'</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s2">`'nonce-</span><span class="p">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">locals</span><span class="p">.</span><span class="nx">cspNonce</span><span class="p">}</span><span class="s2">'`</span><span class="p">],</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Content-Security-Policy: script-src 'self'"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">({</span>
+    <span class="na">useDefaults</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">directives</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">default-src</span><span class="dl">"</span><span class="p">:</span> <span class="nx">helmet</span><span class="p">.</span><span class="nx">contentSecurityPolicy</span><span class="p">.</span><span class="nx">dangerouslyDisableDefaultSrc</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">script-src</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">'self'</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>helmet-csp</code>.</p>
+</details>
+<details>
+<summary><code>helmet.crossOriginEmbedderPolicy()</code></summary>
+<p><code>helmet.crossOriginEmbedderPolicy</code> sets the <code>Cross-Origin-Embedder-Policy</code> header to <code>require-corp</code>. See <a href="https://developer.cdn.mozilla.net/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy">MDN's article on this header</a> for more.</p>
+<p>This middleware is not included when calling <code>helmet()</code> by default, and must be enabled explicitly. It will be enabled by default in the next major version of Helmet.</p>
+<p>Example usage with Helmet:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Uses the default Helmet options and adds the `crossOriginEmbedderPolicy` middleware.</span>
+<span class="c1">// Sets "Cross-Origin-Embedder-Policy: require-corp"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">({</span> <span class="na">crossOriginEmbedderPolicy</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}));</span>
+</code></pre></div></div>
+<p>Standalone example:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Cross-Origin-Embedder-Policy: require-corp"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginEmbedderPolicy</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can't install this module separately.</p>
+</details>
+<details>
+<summary><code>helmet.crossOriginOpenerPolicy()</code></summary>
+<p><code>helmet.crossOriginOpenerPolicy</code> sets the <code>Cross-Origin-Opener-Policy</code> header. For more, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy">MDN's article on this header</a>.</p>
+<p>This middleware is not included when calling <code>helmet()</code> by default, and must be enabled explicitly. It will be enabled by default in the next major version of Helmet.</p>
+<p>Example usage with Helmet:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Uses the default Helmet options and adds the `crossOriginOpenerPolicy` middleware.</span>
+
+<span class="c1">// Sets "Cross-Origin-Opener-Policy: same-origin"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">({</span> <span class="na">crossOriginOpenerPolicy</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}));</span>
+
+<span class="c1">// Sets "Cross-Origin-Opener-Policy: same-origin-allow-popups"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">({</span> <span class="na">crossOriginOpenerPolicy</span><span class="p">:</span> <span class="p">{</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">same-origin-allow-popups</span><span class="dl">"</span> <span class="p">}</span> <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>Standalone example:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Cross-Origin-Opener-Policy: same-origin"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginOpenerPolicy</span><span class="p">());</span>
+
+<span class="c1">// Sets "Cross-Origin-Opener-Policy: same-origin-allow-popups"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginOpenerPolicy</span><span class="p">({</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">same-origin-allow-popups</span><span class="dl">"</span> <span class="p">}));</span>
+
+<span class="c1">// Sets "unsafe-none-Opener-Policy: unsafe-none"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginOpenerPolicy</span><span class="p">({</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">unsafe-none</span><span class="dl">"</span> <span class="p">}));</span>
+</code></pre></div></div>
+<p>You can't install this module separately.</p>
+</details>
+<details>
+<summary><code>helmet.crossOriginResourcePolicy()</code></summary>
+<p><code>helmet.crossOriginResourcePolicy</code> sets the <code>Cross-Origin-Resource-Policy</code> header. For more, see <a href="https://resourcepolicy.fyi/">"Consider deploying Cross-Origin Resource Policy</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Resource-Policy">MDN's article on this header</a>.</p>
+<p>This middleware is not included when calling <code>helmet()</code> by default, and must be enabled explicitly. It will be enabled by default in the next major version of Helmet.</p>
+<p>Example usage with Helmet:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Uses the default Helmet options and adds the `crossOriginResourcePolicy` middleware.</span>
+
+<span class="c1">// Sets "Cross-Origin-Resource-Policy: same-origin"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">({</span> <span class="na">crossOriginResourcePolicy</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}));</span>
+
+<span class="c1">// Sets "Cross-Origin-Resource-Policy: same-site"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">({</span> <span class="na">crossOriginResourcePolicy</span><span class="p">:</span> <span class="p">{</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">same-site</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}));</span>
+</code></pre></div></div>
+<p>Standalone example:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Cross-Origin-Resource-Policy: same-origin"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginResourcePolicy</span><span class="p">());</span>
+
+<span class="c1">// Sets "Cross-Origin-Resource-Policy: same-site"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginResourcePolicy</span><span class="p">({</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">same-site</span><span class="dl">"</span> <span class="p">}));</span>
+
+<span class="c1">// Sets "Cross-Origin-Resource-Policy: cross-origin"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">crossOriginResourcePolicy</span><span class="p">({</span> <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cross-origin</span><span class="dl">"</span> <span class="p">}));</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>cross-origin-resource-policy</code>.</p>
+</details>
+<details>
+<summary><code>helmet.expectCt(options)</code></summary>
+<p><code>helmet.expectCt</code> sets the <code>Expect-CT</code> header which helps mitigate misissued SSL certificates. See <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Certificate_Transparency">MDN's article on Certificate Transparency</a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT"><code>Expect-CT</code> header</a> for more.</p>
+<p><code>options.maxAge</code> is the number of seconds to expect Certificate Transparency. It defaults to <code>0</code>.</p>
+<p><code>options.enforce</code> is a boolean. If <code>true</code>, the user agent (usually a browser) should refuse future connections that violate its Certificate Transparency policy. Defaults to <code>false</code>.</p>
+<p><code>options.reportUri</code> is a string. If set, complying user agents will report Certificate Transparency failures to this URL. Unset by default.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Expect-CT: max-age=86400"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">expectCt</span><span class="p">({</span>
+    <span class="na">maxAge</span><span class="p">:</span> <span class="mi">86400</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Expect-CT: max-age=86400, enforce, report-uri="https://example.com/report"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">expectCt</span><span class="p">({</span>
+    <span class="na">maxAge</span><span class="p">:</span> <span class="mi">86400</span><span class="p">,</span>
+    <span class="na">enforce</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">reportUri</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://example.com/report</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>expect-ct</code>.</p>
+</details>
+<details>
+<summary><code>helmet.referrerPolicy(options)</code></summary>
+<p><code>helmet.referrerPolicy</code> sets the <code>Referrer-Policy</code> header which controls what information is set in <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer">the <code>Referer</code> header</a>. See <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Referer_header:_privacy_and_security_concerns">"Referer header: privacy and security concerns"</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy">the header's documentation</a> on MDN for more.</p>
+<p><code>options.policy</code> is a string or array of strings representing the policy. If passed as an array, it will be joined with commas, which is useful when setting <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy#Specifying_a_fallback_policy">a fallback policy</a>. It defaults to <code>no-referrer</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Referrer-Policy: no-referrer"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">referrerPolicy</span><span class="p">({</span>
+    <span class="na">policy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-referrer</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Referrer-Policy: origin,unsafe-url"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">referrerPolicy</span><span class="p">({</span>
+    <span class="na">policy</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">origin</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">unsafe-url</span><span class="dl">"</span><span class="p">],</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>referrer-policy</code>.</p>
+</details>
+<details>
+<summary><code>helmet.hsts(options)</code></summary>
+<p><code>helmet.hsts</code> sets the <code>Strict-Transport-Security</code> header which tells browsers to prefer HTTPS over insecure HTTP. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">the documentation on MDN</a> for more.</p>
+<p><code>options.maxAge</code> is the number of seconds browsers should remember to prefer HTTPS. If passed a non-integer, the value is rounded down. It defaults to <code>15552000</code>, which is 180 days.</p>
+<p><code>options.includeSubDomains</code> is a boolean which dictates whether to include the <code>includeSubDomains</code> directive, which makes this policy extend to subdomains. It defaults to <code>true</code>.</p>
+<p><code>options.preload</code> is a boolean. If true, it adds the <code>preload</code> directive, expressing intent to add your HSTS policy to browsers. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#Preloading_Strict_Transport_Security">the "Preloading Strict Transport Security" section on MDN</a> for more. It defaults to <code>false</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Strict-Transport-Security: max-age=123456; includeSubDomains"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">hsts</span><span class="p">({</span>
+    <span class="na">maxAge</span><span class="p">:</span> <span class="mi">123456</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Strict-Transport-Security: max-age=123456"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">hsts</span><span class="p">({</span>
+    <span class="na">maxAge</span><span class="p">:</span> <span class="mi">123456</span><span class="p">,</span>
+    <span class="na">includeSubDomains</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "Strict-Transport-Security: max-age=123456; includeSubDomains; preload"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">hsts</span><span class="p">({</span>
+    <span class="na">maxAge</span><span class="p">:</span> <span class="mi">63072000</span><span class="p">,</span>
+    <span class="na">preload</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>hsts</code>.</p>
+</details>
+<details>
+<summary><code>helmet.noSniff()</code></summary>
+<p><code>helmet.noSniff</code> sets the <code>X-Content-Type-Options</code> header to <code>nosniff</code>. This mitigates <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#MIME_sniffing">MIME type sniffing</a> which can cause security vulnerabilities. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options">documentation for this header on MDN</a> for more.</p>
+<p>This middleware takes no options.</p>
+<p>Example:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-Content-Type-Options: nosniff"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">noSniff</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>dont-sniff-mimetype</code>.</p>
+</details>
+<details>
+<summary><code>helmet.originAgentCluster()</code></summary>
+<p><code>helmet.originAgentCluster</code> sets the <code>Origin-Agent-Cluster</code> header, which provides a mechanism to allow web applications to isolate their origins. Read more about it <a href="https://whatpr.org/html/6214/origin.html#origin-keyed-agent-clusters">in the spec</a>.</p>
+<p>This middleware is not included when calling <code>helmet()</code> by default, and must be enabled explicitly. It will be enabled by default in the next major version of Helmet.</p>
+<p>Example usage with Helmet:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Uses the default Helmet options and adds the `originAgentCluster` middleware.</span>
+<span class="c1">// Sets "Origin-Agent-Cluster: ?1"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">({</span> <span class="na">originAgentCluster</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}));</span>
+</code></pre></div></div>
+<p>Standalone example:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "Origin-Agent-Cluster: ?1"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">originAgentCluster</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can't install this module separately.</p>
+</details>
+<details>
+<summary><code>helmet.dnsPrefetchControl(options)</code></summary>
+<p><code>helmet.dnsPrefetchControl</code> sets the <code>X-DNS-Prefetch-Control</code> header to help control DNS prefetching, which can improve user privacy at the expense of performance. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control">documentation on MDN</a> for more.</p>
+<p><code>options.allow</code> is a boolean dictating whether to enable DNS prefetching. It defaults to <code>false</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-DNS-Prefetch-Control: off"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">dnsPrefetchControl</span><span class="p">({</span>
+    <span class="na">allow</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "X-DNS-Prefetch-Control: on"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">dnsPrefetchControl</span><span class="p">({</span>
+    <span class="na">allow</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>dns-prefetch-control</code>.</p>
+</details>
+<details>
+<summary><code>helmet.ieNoOpen()</code></summary>
+<p><code>helmet.ieNoOpen</code> sets the <code>X-Download-Options</code> header, which is specific to Internet Explorer 8. It forces potentially-unsafe downloads to be saved, mitigating execution of HTML in your site's context. For more, see <a href="https://docs.microsoft.com/en-us/archive/blogs/ie/ie8-security-part-v-comprehensive-protection">this old post on MSDN</a>.</p>
+<p>This middleware takes no options.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-Download-Options: noopen"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">ieNoOpen</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>ienoopen</code>.</p>
+</details>
+<details>
+<summary><code>helmet.frameguard(options)</code></summary>
+<p><code>helmet.frameguard</code> sets the <code>X-Frame-Options</code> header to help you mitigate <a href="https://en.wikipedia.org/wiki/Clickjacking">clickjacking attacks</a>. This header is superseded by <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors">the <code>frame-ancestors</code> Content Security Policy directive</a> but is still useful on old browsers. For more, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">the documentation on MDN</a>.</p>
+<p><code>options.action</code> is a string that specifies which directive to use—either <code>DENY</code> or <code>SAMEORIGIN</code>. (A legacy directive, <code>ALLOW-FROM</code>, is not supported by this middleware. <a href="https://github.com/helmetjs/helmet/wiki/How-to-use-X%E2%80%93Frame%E2%80%93Options&#39;s-%60ALLOW%E2%80%93FROM%60-directive">Read more here.</a>) It defaults to <code>SAMEORIGIN</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-Frame-Options: DENY"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">frameguard</span><span class="p">({</span>
+    <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">deny</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "X-Frame-Options: SAMEORIGIN"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">frameguard</span><span class="p">({</span>
+    <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sameorigin</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>frameguard</code>.</p>
+</details>
+<details>
+<summary><code>helmet.permittedCrossDomainPolicies(options)</code></summary>
+<p><code>helmet.permittedCrossDomainPolicies</code> sets the <code>X-Permitted-Cross-Domain-Policies</code> header, which tells some clients (mostly Adobe products) your domain's policy for loading cross-domain content. See <a href="https://owasp.org/www-project-secure-headers/">the description on OWASP</a> for more.</p>
+<p><code>options.permittedPolicies</code> is a string that must be <code>"none"</code>, <code>"master-only"</code>, <code>"by-content-type"</code>, or <code>"all"</code>. It defaults to <code>"none"</code>.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-Permitted-Cross-Domain-Policies: none"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">permittedCrossDomainPolicies</span><span class="p">({</span>
+    <span class="na">permittedPolicies</span><span class="p">:</span> <span class="dl">"</span><span class="s2">none</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+
+<span class="c1">// Sets "X-Permitted-Cross-Domain-Policies: by-content-type"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
+  <span class="nx">helmet</span><span class="p">.</span><span class="nx">permittedCrossDomainPolicies</span><span class="p">({</span>
+    <span class="na">permittedPolicies</span><span class="p">:</span> <span class="dl">"</span><span class="s2">by-content-type</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">);</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>helmet-crossdomain</code>.</p>
+</details>
+<details>
+<summary><code>helmet.hidePoweredBy()</code></summary>
+<p><code>helmet.hidePoweredBy</code> removes the <code>X-Powered-By</code> header, which is set by default in some frameworks (like Express). Removing the header offers very limited security benefits (see <a href="https://github.com/expressjs/express/pull/2813#issuecomment-159270428">this discussion</a>) and is mostly removed to save bandwidth.</p>
+<p>This middleware takes no options.</p>
+<p>If you're using Express, this middleware will work, but you should use <code>app.disable("x-powered-by")</code> instead.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Removes the X-Powered-By header if it was set.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">hidePoweredBy</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>hide-powered-by</code>.</p>
+</details>
+<details>
+<summary><code>helmet.xssFilter()</code></summary>
+<p><code>helmet.xssFilter</code> disables browsers' buggy cross-site scripting filter by setting the <code>X-XSS-Protection</code> header to <code>0</code>. See <a href="https://github.com/helmetjs/helmet/issues/230">discussion about disabling the header here</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">documentation on MDN</a>.</p>
+<p>This middleware takes no options.</p>
+<p>Examples:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sets "X-XSS-Protection: 0"</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">helmet</span><span class="p">.</span><span class="nx">xssFilter</span><span class="p">());</span>
+</code></pre></div></div>
+<p>You can install this module separately as <code>x-xss-protection</code>.</p>
+</details>
+
+  </div>
+
+</article>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+  <div class="wrapper">
+    <p>Thanks to the <a href="https://helmetjs.github.io/contributors">many contributors</a> that helped put Helmet together! Helmet is open source under the <a href="https://github.com/helmetjs/helmet/blob/master/LICENSE" rel="noreferrer noopener">MIT License</a>.</p>
+
+    <p>Icon by <a href="https://www.iconfinder.com/handdrawngoods" rel="noreferrer noopener">Hand-Drawn Goods</a>, licensed under a <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer noopener">CC 3.0 license</a>.</p>
+  </div>
+</footer>
+
+
+
+</body></html>

@@ -6,6 +6,7 @@ module.exports = app;
 const api = require('./server.js');
 
 app.use(helmet());
+helmet.hidePoweredBy();
 
 app.use(express.static('public'));
 app.disable('strict-transport-security');
